@@ -12,12 +12,15 @@ node groups
 
 * wireworld = 1
 * wireworld = 2
+* wireworld = 3
 * wireworldhead
 * wireworldstop
 
 Group wireworld = 1 will run on_wireworld on next generation.
 
 Group wireworld = 2 will run on_wireworld on next generation if 1 or 2 wireworldhead is near by.
+
+Group wireworld = 3 like wireworld = 2 but inverted.
 
 Group wireworldstop can be stopped with a wireworld switch.
 

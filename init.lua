@@ -11,8 +11,6 @@ local contains = function(table, element)
   return false
 end
 
-local mese_def = minetest.registered_nodes["default:mese"]
-
 minetest.register_node("wireworld:wireworld_on", {
 	description = "Wireworld Switch",
 	tiles = {"default_mese_block.png^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
@@ -25,8 +23,7 @@ minetest.register_node("wireworld:wireworld_on", {
     },
   },
 	groups = {cracky = 1, level = 2},
-	sounds = mese_def.sounds,
-	light_source = mese_def.light_source,
+	sounds = default.node_sound_stone_defaults(),
 	on_rightclick = function(pos, node, puncher)
 		local nodes = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}, {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}, {"group:wireworldstop"})
     for i,v in ipairs(nodes) do
@@ -60,8 +57,7 @@ minetest.register_node("wireworld:wireworld_off", {
   },
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory=1},
-	sounds = mese_def.sounds,
-	light_source = mese_def.light_source,
+	sounds = default.node_sound_stone_defaults(),
   drop = "wireworld:wireworld_on",
 	on_rightclick = function(pos, node, puncher)
     local nodes = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}, {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}, {"group:wireworld"})
@@ -89,6 +85,8 @@ minetest.register_craft({
     {"default:steel_ingot","default:mese","default:steel_ingot"},
   }
 })
+
+local mese_def = minetest.registered_nodes["default:mese"]
 
 minetest.register_node("wireworld:mese_head", {
 	description = mese_def.description.." Head",
@@ -179,6 +177,13 @@ minetest.register_globalstep(function(dtime)
 					if count == 1 or count == 2 then
 						meta:set_string("wireworld", "next")
 					end
+        elseif wireworld == 3 then
+          local table = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldhead"})
+          local count = 0
+          for _ in pairs(table) do count = count + 1 end
+          if count < 1 or count > 2 then
+            meta:set_string("wireworld", "next")
+          end
 				else
 					table.remove(v)
 				end

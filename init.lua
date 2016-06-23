@@ -1,89 +1,90 @@
-wireworld_nodes = {}
+wireworld = {}
+wireworld.nodes = {}
 
 local contains = function(table, element)
-  local elementstring = minetest.pos_to_string(element)
-  for _, value in pairs(table) do
-    local valuestring = minetest.pos_to_string(value)
-    if valuestring == elementstring then
-      return true
-    end
-  end
-  return false
+	local elementstring = minetest.pos_to_string(element)
+	for _, value in pairs(table) do
+		local valuestring = minetest.pos_to_string(value)
+		if valuestring == elementstring then
+			return true
+		end
+	end
+	return false
 end
 
 minetest.register_node("wireworld:wireworld_on", {
 	description = "Wireworld Switch",
 	tiles = {"default_mese_block.png^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
 	paramtype = "light",
-  drawtype = "nodebox",
-  node_box = {
-    type = "fixed",
-    fixed = {
-      {-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
-    },
-  },
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
+		},
+	},
 	groups = {cracky = 1, level = 2},
 	sounds = default.node_sound_stone_defaults(),
 	on_rightclick = function(pos, node, puncher)
 		local nodes = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}, {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}, {"group:wireworldstop"})
-    for i,v in ipairs(nodes) do
-      local meta = minetest.get_meta(v)
-      meta:set_string("wireworld", "stop")
-    end
+		for i,v in ipairs(nodes) do
+			local meta = minetest.get_meta(v)
+			meta:set_string("wireworld", "stop")
+		end
 		for i,v in ipairs(nodes) do
 			local find = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldstop"})
 			for i,v in ipairs(find) do
-        if not contains(nodes, v) then
-				  local meta = minetest.get_meta(v)
-          meta:set_string("wireworld", "stop")
-				  nodes[#nodes+1] = v
-        end
+				if not contains(nodes, v) then
+					local meta = minetest.get_meta(v)
+					meta:set_string("wireworld", "stop")
+					nodes[#nodes+1] = v
+				end
 			end
 		end
-    minetest.swap_node(pos, {name = "wireworld:wireworld_off"})
-	end,
+		minetest.swap_node(pos, {name = "wireworld:wireworld_off"})
+	end
 })
 
 minetest.register_node("wireworld:wireworld_off", {
 	description = "Wireworld Switch",
-  tiles = {"default_mese_block.png^[colorize:green:127^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
+	tiles = {"default_mese_block.png^[colorize:green:127^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
 	paramtype = "light",
-  drawtype = "nodebox",
-  node_box = {
-    type = "fixed",
-    fixed = {
-      {-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
-    },
-  },
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
+		},
+	},
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory=1},
 	sounds = default.node_sound_stone_defaults(),
-  drop = "wireworld:wireworld_on",
+	drop = "wireworld:wireworld_on",
 	on_rightclick = function(pos, node, puncher)
-    local nodes = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}, {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}, {"group:wireworld"})
-    for i,v in ipairs(nodes) do
-      local meta = minetest.get_meta(v)
-      meta:set_string("wireworld", "nil")
-    end
+		local nodes = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}, {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}, {"group:wireworld"})
+		for i,v in ipairs(nodes) do
+			local meta = minetest.get_meta(v)
+			meta:set_string("wireworld", "nil")
+		end
 		for i,v in ipairs(nodes) do
 			local find = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworld"})
 			for i,v in ipairs(find) do
-        if not contains(nodes, v) then
-				  local meta = minetest.get_meta(v)
-          meta:set_string("wireworld", "nil")
-				  nodes[#nodes+1] = v
-        end
+				if not contains(nodes, v) then
+					local meta = minetest.get_meta(v)
+					meta:set_string("wireworld", "nil")
+					nodes[#nodes+1] = v
+				end
 			end
 		end
-    minetest.swap_node(pos, {name = "wireworld:wireworld_on"})
-	end,
+		minetest.swap_node(pos, {name = "wireworld:wireworld_on"})
+	end
 })
 
 minetest.register_craft({
-  output = "wireworld:wireworld_on",
-  recipe = {
-    {"default:steel_ingot","default:mese","default:steel_ingot"},
-  }
+	output = "wireworld:wireworld_on",
+	recipe = {
+		{"default:steel_ingot","default:mese","default:steel_ingot"}
+	}
 })
 
 local mese_def = minetest.registered_nodes["default:mese"]
@@ -95,7 +96,7 @@ minetest.register_node("wireworld:mese_head", {
 	groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldhead = 1, wireworldstop = 1},
 	sounds = mese_def.sounds,
 	light_source = mese_def.light_source,
-  drop = "default:mese",
+	drop = "default:mese",
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "wireworld:mese_tail"})
 	end,
@@ -105,8 +106,8 @@ minetest.register_node("wireworld:mese_head", {
 		end
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 minetest.register_node("wireworld:mese_tail", {
@@ -116,7 +117,7 @@ minetest.register_node("wireworld:mese_tail", {
 	groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldstop = 1},
 	sounds = mese_def.sounds,
 	light_source = mese_def.light_source,
-  drop = "default:mese",
+	drop = "default:mese",
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "default:mese"})
 	end,
@@ -126,8 +127,8 @@ minetest.register_node("wireworld:mese_tail", {
 		end
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 minetest.override_item("default:mese", {
@@ -141,8 +142,8 @@ minetest.override_item("default:mese", {
 		end
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 if (minetest.get_modpath("mesecons")) then dofile(minetest.get_modpath("wireworld").."/mesecons.lua") end
@@ -154,8 +155,8 @@ if (minetest.get_modpath("tnt")) then
 			minetest.set_node(pos, {name = "tnt:tnt_burning"})
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld_nodes, pos)
-		end,
+			table.insert(wireworld.nodes, pos)
+		end
 	})
 end
 
@@ -163,7 +164,7 @@ local timer = 0
 minetest.register_globalstep(function(dtime)
 	timer = timer + dtime;
 	if timer >= 0.1 then
-		for k,v in pairs(wireworld_nodes) do
+		for k,v in pairs(wireworld.nodes) do
 			local meta = minetest.get_meta(v)
 			if meta:get_string("wireworld") ~= "stop" then
 				local node = minetest.get_node(v)
@@ -177,13 +178,13 @@ minetest.register_globalstep(function(dtime)
 					if count == 1 or count == 2 then
 						meta:set_string("wireworld", "next")
 					end
-        elseif wireworld == 3 then
-          local table = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldhead"})
-          local count = 0
-          for _ in pairs(table) do count = count + 1 end
-          if count < 1 or count > 2 then
-            meta:set_string("wireworld", "next")
-          end
+				elseif wireworld == 3 then
+					local table = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldhead"})
+					local count = 0
+					for _ in pairs(table) do count = count + 1 end
+					if count < 1 or count > 2 then
+						meta:set_string("wireworld", "next")
+					end
 				else
 					table.remove(v)
 				end
@@ -197,7 +198,7 @@ local timer2 = 0.05
 minetest.register_globalstep(function(dtime)
 	timer2 = timer2 + dtime;
 	if timer2 >= 0.1 then
-		for k,v in pairs(wireworld_nodes) do
+		for k,v in pairs(wireworld.nodes) do
 			local meta = minetest.get_meta(v)
 			if meta:get_string("wireworld") == "next" then
 				local node = minetest.get_node(v)
@@ -215,6 +216,6 @@ minetest.register_lbm({
 	nodenames = {"group:wireworld"},
 	run_at_every_load = true,
 	action = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })

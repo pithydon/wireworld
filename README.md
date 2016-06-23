@@ -33,7 +33,7 @@ For your node to be used by wireworld when placed use
 
 ```lua
 after_place_node = function(pos)
-  table.insert(wireworld_nodes, pos)
+  table.insert(wireworld.nodes, pos)
 end,
 ```
 

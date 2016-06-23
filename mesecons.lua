@@ -7,7 +7,7 @@ local wireworld_converter_rules =
 		{x = 0, y = 1, z = 0},
 		{x = 0, y =-1, z = 0},
 		{x = 0, y = 0, z = 1},
-		{x = 0, y = 0, z =-1},
+		{x = 0, y = 0, z =-1}
 	}
 
 minetest.register_node("wireworld:converter", {
@@ -27,8 +27,8 @@ minetest.register_node("wireworld:converter", {
 		mesecon.receptor_on(pos, wireworld_converter_rules)
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 minetest.register_node("wireworld:converter_in", {
@@ -48,8 +48,8 @@ minetest.register_node("wireworld:converter_in", {
 		-- must be blank
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 minetest.register_node("wireworld:converter_out", {
@@ -68,16 +68,16 @@ minetest.register_node("wireworld:converter_out", {
 		mesecon.receptor_off(pos, wireworld_converter_rules)
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
-	end,
+		table.insert(wireworld.nodes, pos)
+	end
 })
 
 minetest.register_craft({
-  output = "wireworld:converter",
-  recipe = {
+	output = "wireworld:converter",
+	recipe = {
 		{"mesecons:wire_00000000_off"},
-    {"default:mese"},
-  }
+		{"default:mese"}
+	}
 })
 
 if (minetest.get_modpath("mesecons_extrawires")) then
@@ -88,7 +88,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			{x = 0, y = 1, z = 0},
 			{x = 0, y =-1, z = 0},
 			{x = 0, y = 0, z = 1},
-			{x = 0, y = 0, z =-1},
+			{x = 0, y = 0, z =-1}
 		}
 	minetest.register_node("wireworld:mese_head_powered", {
 		description = mese_def.description.." Head",
@@ -97,7 +97,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 		groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldhead = 1, wireworldstop = 1},
 		sounds = mese_def.sounds,
 		light_source = 5,
-    drop = "default:mese",
+		drop = "default:mese",
 		mesecons = {conductor = {
 			state = mesecon.state.on,
 			offstate = "wireworld:mese_head",
@@ -112,8 +112,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld_nodes, pos)
-		end,
+			table.insert(wireworld.nodes, pos)
+		end
 	})
 
 	minetest.register_node("wireworld:mese_tail_powered", {
@@ -123,7 +123,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 		groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldstop = 1},
 		sounds = mese_def.sounds,
 		light_source = 5,
-    drop = "default:mese",
+		drop = "default:mese",
 		mesecons = {conductor = {
 			state = mesecon.state.on,
 			offstate = "wireworld:mese_tail",
@@ -138,8 +138,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld_nodes, pos)
-		end,
+			table.insert(wireworld.nodes, pos)
+		end
 	})
 
 	minetest.override_item("mesecons_extrawires:mese_powered", {
@@ -153,8 +153,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld_nodes, pos)
-		end,
+			table.insert(wireworld.nodes, pos)
+		end
 	})
 
 	minetest.override_item("wireworld:mese_head", {

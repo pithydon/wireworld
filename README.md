@@ -48,7 +48,7 @@ minetest.register_node("new:node", {
 		minetest.swap_node(pos, {name = "new:node_head"})
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld_nodes, pos)
+		table.insert(wireworld.nodes, pos)
 	end,
 })
 ```

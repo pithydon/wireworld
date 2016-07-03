@@ -14,14 +14,23 @@ end
 
 minetest.register_node("wireworld:wireworld_on", {
 	description = "Wireworld Switch",
-	tiles = {"default_mese_block.png^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
+	tiles = {"default_mese_block.png", "default_steel_block.png"},
 	paramtype = "light",
-	drawtype = "nodebox",
-	node_box = {
+	drawtype = "mesh",
+	mesh = "wireworld_switch.obj",
+	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
-		},
+			{-0.5, -0.5, -0.5, 0.5, -0.25, 0.5},
+			{-0.1875, -0.25, -0.1875, 0.1875, -0.125, 0.1875}
+		}
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.25, 0.5},
+			{-0.1875, -0.25, -0.1875, 0.1875, -0.125, 0.1875}
+		}
 	},
 	groups = {cracky = 1, level = 2},
 	sounds = default.node_sound_stone_defaults(),
@@ -47,14 +56,23 @@ minetest.register_node("wireworld:wireworld_on", {
 
 minetest.register_node("wireworld:wireworld_off", {
 	description = "Wireworld Switch",
-	tiles = {"default_mese_block.png^[colorize:green:127^(default_steel_block.png^wireworld_pink.png^[makealpha:255,0,255)"},
+	tiles = {"default_mese_block.png^[colorize:green:127", "default_steel_block.png"},
 	paramtype = "light",
-	drawtype = "nodebox",
-	node_box = {
+	drawtype = "mesh",
+	mesh = "wireworld_switch.obj",
+	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, -0.1875, 0.5},
-		},
+			{-0.5, -0.5, -0.5, 0.5, -0.25, 0.5},
+			{-0.1875, -0.25, -0.1875, 0.1875, -0.125, 0.1875}
+		}
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.25, 0.5},
+			{-0.1875, -0.25, -0.1875, 0.1875, -0.125, 0.1875}
+		}
 	},
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory=1},
@@ -164,21 +182,21 @@ local timer = 0
 minetest.register_globalstep(function(dtime)
 	timer = timer + dtime;
 	if timer >= 0.1 then
-		for k,v in pairs(wireworld.nodes) do
+		for i,v in ipairs(wireworld.nodes) do
 			local meta = minetest.get_meta(v)
 			if meta:get_string("wireworld") ~= "stop" then
 				local node = minetest.get_node(v)
-				local wireworld = minetest.get_item_group(node.name, "wireworld")
-				if wireworld == 1 then
+				local g = minetest.get_item_group(node.name, "wireworld")
+				if g == 1 then
 					meta:set_string("wireworld", "next")
-				elseif wireworld == 2 then
+				elseif g == 2 then
 					local table = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldhead"})
 					local count = 0
 					for _ in pairs(table) do count = count + 1 end
 					if count == 1 or count == 2 then
 						meta:set_string("wireworld", "next")
 					end
-				elseif wireworld == 3 then
+				elseif g == 3 then
 					local table = minetest.find_nodes_in_area({x = v.x - 1, y = v.y - 1, z = v.z - 1}, {x = v.x + 1, y = v.y + 1, z = v.z + 1}, {"group:wireworldhead"})
 					local count = 0
 					for _ in pairs(table) do count = count + 1 end
@@ -186,7 +204,7 @@ minetest.register_globalstep(function(dtime)
 						meta:set_string("wireworld", "next")
 					end
 				else
-					table.remove(v)
+					table.remove(wireworld.nodes, i)
 				end
 			end
 		end
@@ -198,7 +216,7 @@ local timer2 = 0.05
 minetest.register_globalstep(function(dtime)
 	timer2 = timer2 + dtime;
 	if timer2 >= 0.1 then
-		for k,v in pairs(wireworld.nodes) do
+		for _,v in ipairs(wireworld.nodes) do
 			local meta = minetest.get_meta(v)
 			if meta:get_string("wireworld") == "next" then
 				local node = minetest.get_node(v)
@@ -212,10 +230,12 @@ minetest.register_globalstep(function(dtime)
 end)
 
 minetest.register_lbm({
-	name = "wireworld:register_nodes",
+	name = "wireworld:index_nodes",
 	nodenames = {"group:wireworld"},
 	run_at_every_load = true,
 	action = function(pos)
-		table.insert(wireworld.nodes, pos)
+		if not contains(wireworld.nodes, pos) then
+			table.insert(wireworld.nodes, pos)
+		end
 	end
 })

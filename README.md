@@ -1,8 +1,10 @@
-# wireworld by [pithydon]
+wireworld by [pithydon]
 
 Wireworld for Minetest.
 
 See [wikipedia] for more on wireworld.
+
+Forum at https://forum.minetest.net/viewtopic.php?f=11&t=14741.
 
 Licensed under unlicense see LICENSE.txt
 

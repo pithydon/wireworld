@@ -14,7 +14,7 @@ end
 
 minetest.register_node("wireworld:wireworld_on", {
 	description = "Wireworld Switch",
-	tiles = {"default_mese_block.png", "default_steel_block.png"},
+	tiles = {{name = "default_mese_block.png", backface_culling = true}, {name = "default_steel_block.png", backface_culling = true}},
 	paramtype = "light",
 	drawtype = "mesh",
 	mesh = "wireworld_switch.obj",
@@ -56,7 +56,7 @@ minetest.register_node("wireworld:wireworld_on", {
 
 minetest.register_node("wireworld:wireworld_off", {
 	description = "Wireworld Switch",
-	tiles = {"default_mese_block.png^[colorize:green:127", "default_steel_block.png"},
+	tiles = {{name = "default_mese_block.png^[colorize:green:127", backface_culling = true}, {name = "default_steel_block.png", backface_culling = true}},
 	paramtype = "light",
 	drawtype = "mesh",
 	mesh = "wireworld_switch.obj",

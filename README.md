@@ -1,12 +1,8 @@
-wireworld by pithydon
+wireworld
 
 Wireworld for Minetest.
 
 See [wikipedia] for more on wireworld.
-
-Forum: https://forum.minetest.net/viewtopic.php?f=11&t=14741
-
-Github: https://github.com/pithydon/wireworld
 
 License for all of this mod is "CC0", see below.
 

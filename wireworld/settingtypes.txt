@@ -1,0 +1,2 @@
+# Changes the speed of a wireworld generation in centiseconds.
+wireworld_generation_speed (generation speed) int 14

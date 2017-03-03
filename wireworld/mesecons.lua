@@ -27,15 +27,15 @@ minetest.register_node("wireworld:converter", {
 		mesecon.receptor_on(pos, wireworld_converter_rules)
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld.nodes, pos)
+		wireworld.after_place_node(pos, false)
 	end
 })
 
 minetest.register_node("wireworld:converter_in", {
 	description = "Wireworld Converter",
-	tiles = {"mesecons_wire_on.png"},
+	tiles = {"mesecons_wire_on.png^[colorize:blue:127"},
 	paramtype = "light",
-	groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldhead = 1},
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 4, wireworldhead = 1},
 	sounds = mese_def.sounds,
 	drop = "wireworld:converter",
 	mesecons = {effector = {
@@ -44,11 +44,8 @@ minetest.register_node("wireworld:converter_in", {
 			minetest.swap_node(pos, {name = "wireworld:converter"})
 		end
 	}},
-	on_wireworld = function(pos)
-		-- must be blank
-	end,
 	after_place_node = function(pos)
-		table.insert(wireworld.nodes, pos)
+		wireworld.after_place_node(pos, false)
 	end
 })
 
@@ -56,7 +53,7 @@ minetest.register_node("wireworld:converter_out", {
 	description = "Wireworld Converter",
 	tiles = {"mesecons_wire_on.png"},
 	paramtype = "light",
-	groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 3},
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 3},
 	sounds = mese_def.sounds,
 	drop = "wireworld:converter",
 	mesecons = {receptor = {
@@ -68,7 +65,7 @@ minetest.register_node("wireworld:converter_out", {
 		mesecon.receptor_off(pos, wireworld_converter_rules)
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld.nodes, pos)
+		wireworld.after_place_node(pos, false)
 	end
 })
 
@@ -94,7 +91,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 		description = mese_def.description.." Head",
 		tiles = {"default_mese_block.png^[colorize:blue:127"},
 		paramtype = "light",
-		groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldhead = 1, wireworldstop = 1},
+		groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 1, wireworldhead = 1, wireworldstop = 1},
 		sounds = mese_def.sounds,
 		light_source = 5,
 		drop = "default:mese",
@@ -107,12 +104,12 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "wireworld:mese_tail_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" then
+			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "wireworld:mese_tail_powered"})
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld.nodes, pos)
+			wireworld.after_place_node(pos, true)
 		end
 	})
 
@@ -120,7 +117,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 		description = mese_def.description.." Tail",
 		tiles = {"default_mese_block.png^[colorize:red:127"},
 		paramtype = "light",
-		groups = {cracky = 1, level = 2, not_in_creative_inventory=1, wireworld = 1, wireworldstop = 1},
+		groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 1, wireworldstop = 1},
 		sounds = mese_def.sounds,
 		light_source = 5,
 		drop = "default:mese",
@@ -133,12 +130,12 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "mesecons_extrawires:mese_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" then
+			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "mesecons_extrawires:mese_powered"})
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld.nodes, pos)
+			wireworld.after_place_node(pos, true)
 		end
 	})
 
@@ -148,12 +145,12 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "wireworld:mese_head_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" then
+			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "wireworld:mese_head_powered"})
 			end
 		end,
 		after_place_node = function(pos)
-			table.insert(wireworld.nodes, pos)
+			wireworld.after_place_node(pos, true)
 		end
 	})
 

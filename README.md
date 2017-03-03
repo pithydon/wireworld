@@ -1,4 +1,4 @@
-wireworld
+wireworld v1.0
 
 Wireworld for Minetest.
 
@@ -41,6 +41,7 @@ node groups
 * wireworld = 1
 * wireworld = 2
 * wireworld = 3
+* wireworld = 4
 * wireworldhead
 * wireworldstop
 
@@ -50,20 +51,24 @@ Group wireworld = 2 will run on_wireworld on next generation if 1 or 2 wireworld
 
 Group wireworld = 3 like wireworld = 2 but inverted.
 
+Group wireworld = 4 do not run on_wireworld, but stay in the wireworld network.
+
 Group wireworldstop can be stopped with a wireworld switch.
 
 on_wireworld is a part of the node definition.
 
 ```lua
-on_wireworld = function(pos)
+on_wireworld = func(pos)
 ```
 For your node to be used by wireworld when placed use
 
 ```lua
 after_place_node = function(pos)
-  table.insert(wireworld.nodes, pos)
+  wireworld.after_place_node(pos[, stopable])
 end,
 ```
+
+If stopable is omitted group wireworldstop will be checked.
 
 There is a lbm to catch nodes that have already been placed.
 
@@ -76,9 +81,19 @@ minetest.register_node("new:node", {
 		minetest.swap_node(pos, {name = "new:node_head"})
 	end,
 	after_place_node = function(pos)
-		table.insert(wireworld.nodes, pos)
+		wireworld.after_place_node(pos)
 	end,
 })
+```
+
+Wireworld uses node meta int named "wireworld" to pause wireworld.
+
+```txt
+0 = go
+
++ 1 = stopped by "Wireworld Stopper"
+
++ 2 = stopped by something else
 ```
 
 [wikipedia]: <https://en.wikipedia.org/wiki/Wireworld>

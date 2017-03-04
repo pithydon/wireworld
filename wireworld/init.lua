@@ -272,10 +272,12 @@ do
 			else
 				check = true
 				for _,v in ipairs(next) do
-					local node = minetest.get_node(v)
-					local node_def = minetest.registered_nodes[node.name]
-					if node_def and node_def.on_wireworld then
-						node_def.on_wireworld(v)
+					if minetest.get_meta(v):get_int("wireworld") == 0 then
+						local node = minetest.get_node(v)
+						local node_def = minetest.registered_nodes[node.name]
+						if node_def and node_def.on_wireworld then
+							node_def.on_wireworld(v)
+						end
 					end
 				end
 				next = {}

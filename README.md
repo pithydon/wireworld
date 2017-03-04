@@ -1,4 +1,4 @@
-wireworld v1.0
+wireworld v1.0-dev
 
 Wireworld for Minetest.
 

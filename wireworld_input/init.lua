@@ -48,13 +48,20 @@ minetest.register_node(":wireworld:switch_on", {
 	sounds = default.node_sound_defaults(),
 	on_rightclick = function(pos, node)
 		local under = vector.add(pos, minetest.wallmounted_to_dir(node.param2))
-		if minetest.get_item_group(minetest.get_node(under).name, "wireworldstop") > 0 then
+		local under_node = minetest.get_node(under)
+		if minetest.get_item_group(under_node.name, "wireworldstop") > 0 then
 			local meta = minetest.get_meta(under)
 			local int = meta:get_int("wireworld")
 			if int == 0 then
 				meta:set_int("wireworld", 2)
 			elseif int == 1 then
 				meta:set_int("wireworld", 3)
+			end
+			if minetest.get_item_group(under_node.name, "wireworldhead") > 0 then
+				local node_def = minetest.registered_nodes[under_node.name]
+				if node_def and node_def.on_wireworld then
+					node_def.on_wireworld(under)
+				end
 			end
 			for _,v in ipairs(get_touching(under)) do
 				local node = minetest.get_node(v)

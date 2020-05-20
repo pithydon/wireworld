@@ -14,8 +14,8 @@ minetest.register_node(":wireworld:mese_head", {
 			minetest.swap_node(pos, {name = "wireworld:mese_tail"})
 		end
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, true)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, true)
 	end
 })
 
@@ -35,8 +35,8 @@ minetest.register_node(":wireworld:mese_tail", {
 			minetest.swap_node(pos, {name = "default:mese"})
 		end
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, true)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, true)
 	end
 })
 
@@ -50,8 +50,8 @@ minetest.override_item("default:mese", {
 			minetest.swap_node(pos, {name = "wireworld:mese_head"})
 		end
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, true)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, true)
 	end
 })
 
@@ -67,8 +67,8 @@ minetest.register_node(":wireworld:meselamp_dead", {
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "default:meselamp"})
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, true)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, true)
 	end
 })
 
@@ -77,8 +77,8 @@ minetest.override_item("default:meselamp", {
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "wireworld:meselamp_dead"})
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, true)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, true)
 	end
 })
 

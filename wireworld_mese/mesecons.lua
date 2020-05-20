@@ -24,8 +24,8 @@ minetest.register_node(":wireworld:converter", {
 		minetest.swap_node(pos, {name = "wireworld:converter_out"})
 		mesecon.receptor_on(pos, wireworld_converter_rules)
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, false)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, false)
 	end
 })
 
@@ -42,8 +42,8 @@ minetest.register_node(":wireworld:converter_in", {
 			minetest.swap_node(pos, {name = "wireworld:converter_dead"})
 		end
 	}},
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, false)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, false)
 	end
 })
 
@@ -62,8 +62,8 @@ minetest.register_node(":wireworld:converter_out", {
 		minetest.swap_node(pos, {name = "wireworld:converter_dead"})
 		mesecon.receptor_off(pos, wireworld_converter_rules)
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, false)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, false)
 	end
 })
 
@@ -77,8 +77,8 @@ minetest.register_node(":wireworld:converter_dead", {
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "wireworld:converter"})
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos, false)
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos, false)
 	end
 })
 
@@ -121,8 +121,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 				minetest.swap_node(pos, {name = "wireworld:mese_tail_powered"})
 			end
 		end,
-		after_place_node = function(pos)
-			wireworld.after_place_node(pos, true)
+		on_construct = function(pos)
+			wireworld.circuit_add_node(pos, true)
 		end
 	})
 
@@ -147,8 +147,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 				minetest.swap_node(pos, {name = "mesecons_extrawires:mese_powered"})
 			end
 		end,
-		after_place_node = function(pos)
-			wireworld.after_place_node(pos, true)
+		on_construct = function(pos)
+			wireworld.circuit_add_node(pos, true)
 		end
 	})
 
@@ -162,8 +162,8 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 				minetest.swap_node(pos, {name = "wireworld:mese_head_powered"})
 			end
 		end,
-		after_place_node = function(pos)
-			wireworld.after_place_node(pos, true)
+		on_construct = function(pos)
+			wireworld.circuit_add_node(pos, true)
 		end
 	})
 

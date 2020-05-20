@@ -45,32 +45,31 @@ node groups
 * wireworldhead
 * wireworldstop
 
-Group wireworld = 1 will run on_wireworld on next generation.
+Group "wireworld = 1" will run "on_wireworld" on next generation.
 
-Group wireworld = 2 will run on_wireworld on next generation if 1 or 2 wireworldhead is near by.
+Group "wireworld = 2" will run "on_wireworld" on next generation if 1 or 2 "wireworldhead" is near by.
 
-Group wireworld = 3 like wireworld = 2 but inverted.
+Group "wireworld = 3" like "wireworld = 2" but inverted.
 
-Group wireworld = 4 do not run on_wireworld, but stay in the wireworld network.
+Group "wireworld = 4" do not run "on_wireworld", but stay in the wireworld network.
 
-Group wireworldstop can be stopped with a wireworld switch.
+Group "wireworldstop" can be stopped with a wireworld switch.
 
-on_wireworld is a part of the node definition.
+"on_wireworld" is a part of the node definition.
 
-```lua
-on_wireworld = func(pos)
-```
-For your node to be used by wireworld when placed use
+For your node to be used by wireworld it needs to be added to the circuit. The following functions can be used to manage the circuit.
 
-```lua
-after_place_node = function(pos)
-  wireworld.after_place_node(pos[, stopable])
-end,
-```
+* wireworld.in_circuit(pos)
+* wireworld.circuit_add_node(pos[, stopable])
+* wireworld.circuit_remove_node(pos)
 
-If stopable is omitted group wireworldstop will be checked.
+If "stopable" is omitted group "wireworldstop" will be checked.
 
-There is a lbm to catch nodes that have already been placed.
+"wireworld.in_circuit(pos)" returns true if node is already added to circuit. Not needed for using "wireworld.circuit_add_node(pos[, stopable])".
+
+There is a LBM to add nodes that have already been placed.
+
+Nodes will automatically be removed from the circuit if they are not a valid wireworld block.
 
 example
 
@@ -80,9 +79,9 @@ minetest.register_node("new:node", {
 	on_wireworld = function(pos)
 		minetest.swap_node(pos, {name = "new:node_head"})
 	end,
-	after_place_node = function(pos)
-		wireworld.after_place_node(pos)
-	end,
+	on_construct = function(pos)
+		wireworld.circuit_add_node(pos)
+	end
 })
 ```
 
@@ -96,6 +95,8 @@ Wireworld uses node meta int named "wireworld" to pause wireworld.
 + 2 = stopped by something else
 ```
 
-You can check if a node is loaded in a circuit with "wireworld.in_circuit(pos)" returns a boolean.
+Legacy API:
+
+* wireworld.after_place_node(pos[, stopable]) -- Use "wireworld.circuit_add_node(pos[, stopable])" instead.
 
 [wikipedia]: <https://en.wikipedia.org/wiki/Wireworld>

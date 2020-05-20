@@ -11,7 +11,7 @@ local contains = function(t, pos)
 	return false
 end
 
-wireworld.in_circuit = function(pos)
+function wireworld.in_circuit(pos)
 	for _,v in ipairs(wireworld_nodes) do
 		if vector.equals(v, pos) then
 			return true
@@ -30,7 +30,7 @@ local check_stop = function(pos)
 	return false
 end
 
-function wireworld.after_place_node(pos, stopable)
+function wireworld.circuit_add_node(pos, stopable)
 	if stopable == nil then
 		if minetest.get_item_group(minetest.get_node(pos).name, "wireworldstop") > 0 then
 			stopable = true
@@ -41,11 +41,27 @@ function wireworld.after_place_node(pos, stopable)
 	if stopable and check_stop(pos) then
 		minetest.get_meta(pos):set_int("wireworld", 1)
 	end
-	local forceload = minetest.forceload_block(pos, true)
-	table.insert(wireworld_nodes, pos)
-	if not forceload then
-		minetest.log("info", "wireworld could not foreceload "..minetest.pos_to_string(pos))
+	if not contains(wireworld_nodes, pos) then
+		local forceload = minetest.forceload_block(pos, true)
+		table.insert(wireworld_nodes, pos)
+		if not forceload then
+			minetest.log("info", "wireworld could not foreceload "..minetest.pos_to_string(pos))
+		end
 	end
+end
+
+function wireworld.circuit_remove_node(pos)
+	for i,v in ipairs(wireworld_nodes) do
+		if vector.equals(pos, v) then
+			minetest.forceload_free_block(v)
+			table.remove(wireworld_nodes, i)
+			return
+		end
+	end
+end
+
+function wireworld.after_place_node(pos, stopable)
+	return wireworld.circuit_add_node(pos, stopable)
 end
 
 if (minetest.get_modpath("tnt")) then
@@ -54,8 +70,8 @@ if (minetest.get_modpath("tnt")) then
 		on_wireworld = function(pos)
 			minetest.set_node(pos, {name = "tnt:tnt_burning"})
 		end,
-		after_place_node = function(pos)
-			wireworld.after_place_node(pos, false)
+		on_construct = function(pos)
+			wireworld.circuit_add_node(pos, false)
 		end
 	})
 end

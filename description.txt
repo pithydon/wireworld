@@ -1,1 +1,0 @@
-Adds wireworld cellular automaton to Minetest.

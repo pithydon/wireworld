@@ -1,4 +1,4 @@
-wireworld v1.0-dev
+wireworld
 
 Wireworld for Minetest.
 
@@ -95,5 +95,7 @@ Wireworld uses node meta int named "wireworld" to pause wireworld.
 
 + 2 = stopped by something else
 ```
+
+You can check if a node is loaded in a circuit with "wireworld.in_circuit(pos)" returns a boolean.
 
 [wikipedia]: <https://en.wikipedia.org/wiki/Wireworld>

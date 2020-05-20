@@ -1,5 +1,3 @@
-local mese_def = minetest.registered_nodes["default:mese"]
-
 local wireworld_converter_rules =
 	{
 		{x = 1, y = 0, z = 0},
@@ -10,12 +8,12 @@ local wireworld_converter_rules =
 		{x = 0, y = 0, z =-1}
 	}
 
-minetest.register_node("wireworld:converter", {
+minetest.register_node(":wireworld:converter", {
 	description = "Wireworld Converter",
 	tiles = {"mesecons_wire_off.png"},
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, wireworld = 2},
-	sounds = mese_def.sounds,
+	sounds = default.node_sound_stone_defaults(),
 	mesecons = {effector = {
 		rules = wireworld_converter_rules,
 		action_on = function (pos, node)
@@ -31,17 +29,17 @@ minetest.register_node("wireworld:converter", {
 	end
 })
 
-minetest.register_node("wireworld:converter_in", {
+minetest.register_node(":wireworld:converter_in", {
 	description = "Wireworld Converter",
 	tiles = {"mesecons_wire_on.png^[colorize:blue:127"},
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 4, wireworldhead = 1},
-	sounds = mese_def.sounds,
+	sounds = default.node_sound_stone_defaults(),
 	drop = "wireworld:converter",
 	mesecons = {effector = {
 		rules = wireworld_converter_rules,
 		action_off = function (pos, node)
-			minetest.swap_node(pos, {name = "wireworld:converter"})
+			minetest.swap_node(pos, {name = "wireworld:converter_dead"})
 		end
 	}},
 	after_place_node = function(pos)
@@ -49,20 +47,35 @@ minetest.register_node("wireworld:converter_in", {
 	end
 })
 
-minetest.register_node("wireworld:converter_out", {
+minetest.register_node(":wireworld:converter_out", {
 	description = "Wireworld Converter",
 	tiles = {"mesecons_wire_on.png"},
 	paramtype = "light",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 3},
-	sounds = mese_def.sounds,
+	sounds = default.node_sound_stone_defaults(),
 	drop = "wireworld:converter",
 	mesecons = {receptor = {
 		state = mesecon.state.on,
 		rules = wireworld_converter_rules
 	}},
 	on_wireworld = function(pos)
-		minetest.swap_node(pos, {name = "wireworld:converter"})
+		minetest.swap_node(pos, {name = "wireworld:converter_dead"})
 		mesecon.receptor_off(pos, wireworld_converter_rules)
+	end,
+	after_place_node = function(pos)
+		wireworld.after_place_node(pos, false)
+	end
+})
+
+minetest.register_node(":wireworld:converter_dead", {
+	description = "Wireworld Converter",
+	tiles = {"mesecons_wire_off.png"},
+	paramtype = "light",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 1},
+	sounds = default.node_sound_stone_defaults(),
+	drop = "wireworld:converter",
+	on_wireworld = function(pos)
+		minetest.swap_node(pos, {name = "wireworld:converter"})
 	end,
 	after_place_node = function(pos)
 		wireworld.after_place_node(pos, false)
@@ -87,12 +100,12 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			{x = 0, y = 0, z = 1},
 			{x = 0, y = 0, z =-1}
 		}
-	minetest.register_node("wireworld:mese_head_powered", {
-		description = mese_def.description.." Head",
+	minetest.register_node(":wireworld:mese_head_powered", {
+		description = "Mese Block Head",
 		tiles = {"default_mese_block.png^[colorize:blue:127"},
 		paramtype = "light",
 		groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 1, wireworldhead = 1, wireworldstop = 1},
-		sounds = mese_def.sounds,
+		sounds = default.node_sound_stone_defaults(),
 		light_source = 5,
 		drop = "default:mese",
 		mesecons = {conductor = {
@@ -104,7 +117,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "wireworld:mese_tail_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
+			if puncher:get_wielded_item():get_name() == "default:mese_crystal" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "wireworld:mese_tail_powered"})
 			end
 		end,
@@ -113,12 +126,12 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 		end
 	})
 
-	minetest.register_node("wireworld:mese_tail_powered", {
-		description = mese_def.description.." Tail",
+	minetest.register_node(":wireworld:mese_tail_powered", {
+		description = "Mese Block Tail",
 		tiles = {"default_mese_block.png^[colorize:red:127"},
 		paramtype = "light",
 		groups = {cracky = 1, level = 2, not_in_creative_inventory = 1, wireworld = 1, wireworldstop = 1},
-		sounds = mese_def.sounds,
+		sounds = default.node_sound_stone_defaults(),
 		light_source = 5,
 		drop = "default:mese",
 		mesecons = {conductor = {
@@ -130,7 +143,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "mesecons_extrawires:mese_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
+			if puncher:get_wielded_item():get_name() == "default:mese_crystal" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "mesecons_extrawires:mese_powered"})
 			end
 		end,
@@ -145,7 +158,7 @@ if (minetest.get_modpath("mesecons_extrawires")) then
 			minetest.swap_node(pos, {name = "wireworld:mese_head_powered"})
 		end,
 		on_punch = function(pos, node, puncher)
-			if puncher:get_wielded_item():get_name() == "default:torch" and not minetest.is_protected(pos, puncher:get_player_name()) then
+			if puncher:get_wielded_item():get_name() == "default:mese_crystal" and not minetest.is_protected(pos, puncher:get_player_name()) then
 				minetest.swap_node(pos, {name = "wireworld:mese_head_powered"})
 			end
 		end,

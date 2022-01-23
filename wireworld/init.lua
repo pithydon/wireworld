@@ -64,18 +64,6 @@ function wireworld.after_place_node(pos, stopable)
 	return wireworld.circuit_add_node(pos, stopable)
 end
 
-if (minetest.get_modpath("tnt")) then
-	minetest.override_item("tnt:tnt", {
-		groups = {dig_immediate = 2, mesecon = 2, tnt = 1, wireworld = 2},
-		on_wireworld = function(pos)
-			minetest.set_node(pos, {name = "tnt:tnt_burning"})
-		end,
-		on_construct = function(pos)
-			wireworld.circuit_add_node(pos, false)
-		end
-	})
-end
-
 do
 	local timer = 0
 	local check = true
@@ -203,4 +191,16 @@ do
 			timer = 0
 		end
 	end)
+end
+
+if (minetest.get_modpath("tnt")) then
+	minetest.override_item("tnt:tnt", {
+		groups = {dig_immediate = 2, mesecon = 2, tnt = 1, wireworld = 2},
+		on_wireworld = function(pos)
+			minetest.set_node(pos, {name = "tnt:tnt_burning"})
+		end,
+		on_construct = function(pos)
+			wireworld.circuit_add_node(pos, false)
+		end
+	})
 end
